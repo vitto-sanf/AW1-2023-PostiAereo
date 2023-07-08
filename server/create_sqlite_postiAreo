@@ -1,0 +1,28 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "user" (
+	"id"	INTEGER,
+	"email"	TEXT,
+	"password"	INTEGER,
+	"salt"	INTEGER,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "airplane" (
+	"id"	INTEGER,
+	"type"	TEXT,
+	"rows"	INTEGER,
+	"seats"	INTEGER,
+	"status"	TEXT,
+	"booked"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "reservation" (
+	"id"	INTEGER,
+	"id_User"	INTEGER,
+	"Date"	INTEGER,
+	"id_Airplain"	INTEGER
+);
+INSERT INTO "airplane" VALUES (1,'locale',15,4,'1',NULL);
+INSERT INTO "airplane" VALUES (2,'regionale',20,5,'1',NULL);
+INSERT INTO "airplane" VALUES (3,'internazionale',25,6,'1',NULL);
+INSERT INTO "airplane" VALUES (4,'nazionale',15,4,'1',NULL);
+COMMIT;

@@ -1,0 +1,8 @@
+GET http://localhost:3001/api/flights HTTP/1.1
+###
+GET http://localhost:3001/api/flights/2 HTTP/1.1
+
+###
+GET http://localhost:3001/api/bookedSeats/2 HTTP/1.1
+###
+GET http://localhost:3001/api/userReservations/2 HTTP/1.1
