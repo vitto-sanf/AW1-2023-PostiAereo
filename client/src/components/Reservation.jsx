@@ -81,10 +81,7 @@ function Reservation(props) {
                             Data :{" "}
                             {dayjs(reservation.date).format("DD-MM-YYYY")}
                           </Card.Subtitle>
-                          <Card.Subtitle className="mb-2 text-muted">
-                            status :{reservation.status}
-                            
-                          </Card.Subtitle>
+                          
 
                           <Button
                             variant="danger"

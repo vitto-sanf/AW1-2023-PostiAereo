@@ -59,7 +59,7 @@ async function getReservationByUserId() {
       type: e.type,
       date: dayjs(e.date),
       id_Ar: e.id_Ar,
-      status : e.status
+     
     }));
   } else {
     throw reservations; // mi aspetto che sia un oggetto json fornito dal server che contiene l'errore

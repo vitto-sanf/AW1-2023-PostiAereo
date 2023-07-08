@@ -36,6 +36,7 @@ function Home(props) {
                     variant="success"
                     className="float-right"
                     style={{ float: "right" }}
+                    disabled={!flight.status }
                     onClick={() => navigate(`/flight/${flight.id}`)}
                   >
                     Prenota

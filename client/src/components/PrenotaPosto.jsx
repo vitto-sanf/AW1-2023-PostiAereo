@@ -21,9 +21,8 @@ function SeatReservationPage(props) {
   const { flightId } = useParams();
   const navigate = useNavigate();
   const letters = "ABCDEFG";
-  
 
-  //Caricamento dati per l'aereo selezionato 
+  //Caricamento dati per l'aereo selezionato
   useEffect(() => {
     const datiAreo = async () => {
       try {
@@ -40,11 +39,9 @@ function SeatReservationPage(props) {
     datiAreo();
   }, [flightId]);
 
-
   useEffect(() => {
-    
     if (props.seatErrors.length > 0) {
-      setLoading(false)
+      setLoading(false);
       setErrorSeats(props.seatErrors);
       setSelectedSeats([]);
       props.resetSeatError();
@@ -55,10 +52,9 @@ function SeatReservationPage(props) {
             return [...oldList, element];
           });
         });
-        
       }, 5000);
-    }else if (props.confirmMsg) {
-      setLoading(false)
+    } else if (props.confirmMsg) {
+      setLoading(false);
       selectedSeats.forEach((element) => {
         setBookedSeats((oldList) => {
           return [...oldList, element];
@@ -66,25 +62,22 @@ function SeatReservationPage(props) {
       });
 
       setSelectedSeats([]);
-    } else if (props.errorMsg){
-      setLoading(false)
-      setSelectedSeats([])
+    } else if (props.errorMsg) {
+      setLoading(false);
+      setSelectedSeats([]);
     }
-    
-    
-  }, [props.seatErrors, props.confirmMsg,props.errorMsg]);
+  }, [props.seatErrors, props.confirmMsg, props.errorMsg]);
 
   const automaticReservation = (nPassengers) => {
     let count = 0;
-    
+
     while (count < nPassengers) {
       let row = Math.floor(Math.random() * rows) + 1;
       let seat = Math.floor(Math.random() * seatsPerRow);
       const seatNumber = `${row}${letters.charAt(seat)}`;
 
       if (
-        !bookedSeats.includes(seatNumber) &&
-        !selectedSeats.includes(seatNumber)
+        !bookedSeats.includes(seatNumber) && !selectedSeats.includes(seatNumber)
       ) {
         selectedSeats.push(seatNumber);
         count++;
@@ -100,6 +93,7 @@ function SeatReservationPage(props) {
     }
   };
 
+  //funzione per fare il render dei posti , essi verranno stampati come righe di una matrice 
   const renderSeats = () => {
     const seats = [];
 
@@ -173,7 +167,6 @@ function SeatReservationPage(props) {
               bookedSeats={bookedSeats}
               rows={rows}
               selectedSeats={selectedSeats}
-              
             />
             <Button
               variant="link"
@@ -224,7 +217,7 @@ function SeatReservationPage(props) {
                   user={props.user}
                   modalShow={() => setModalShow(true)}
                   cancelReservation={() => setSelectedSeats([])}
-                  setLoading= {()=>setLoading(true)}
+                  setLoading={() => setLoading(true)}
                 />
               </Col>
             </Row>

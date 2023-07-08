@@ -70,7 +70,7 @@ exports.getReservationByUserId = (id) => {
         return;
       }
       
-      const reservation = rows.map((e)=> ({ id:e.id, id_Ar : e.id_Airplane , date: e.date , type: e.type, booked: e.booked, status : e.status } ));
+      const reservation = rows.map((e)=> ({ id:e.id, id_Ar : e.id_Airplane , date: e.date , type: e.type, booked: e.booked } ));
       resolve(reservation);
       
     });

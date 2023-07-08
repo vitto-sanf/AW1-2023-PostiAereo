@@ -70,7 +70,7 @@ const isLoggedIn = (req, res, next) => {
 app.use(
   session({
     // by default, Passport uses a MemoryStore to keep track of the sessions
-    secret: "wge8d239bwd93rkskb", // a secret value
+    secret: "hjtke43rjn4854lpec", // a secret value
     resave: false,
     saveUninitialized: false,
   })
@@ -143,19 +143,21 @@ app.get("/api/userReservations", isLoggedIn, async (req, res) => {
 app.post(
   "/api/reservations",
   isLoggedIn,
-  [check("date").isDate({ format: "YYYY-MM-DD", strictMode: true }),
-     check("id_Ar").isInt(), check("booked").isArray({min:1})],
+  [
+    check("date").isDate({ format: "YYYY-MM-DD", strictMode: true }),
+    check("id_Ar").isInt(),
+    check("booked").isArray({ min: 1 }),
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-    
 
     try {
       const resultReservation = await dao.getReservationByUserId(req.user.id);
 
-      //Controllo se l' utente ha già effettuato una prenotazione per quel volo 
+      //Controllo se l' utente ha già effettuato una prenotazione per quel volo
       for (let i = 0; i < resultReservation.length; i++) {
         if (resultReservation[i].id_Ar === parseInt(req.body.id_Ar)) {
           return res
@@ -164,32 +166,49 @@ app.post(
         }
       }
 
-      //Controllo se i posti selezionati sono ancora disponibili 
+      //Controllo se i posti selezionati sono ancora disponibili
       const allReservation = await dao.getBookedSeats(req.body.id_Ar);
 
       const notAvailable = [];
 
-      for (let i = 0; i < req.body.booked.length; i++) {
-        for (let j = 0; j < allReservation.length; j++) {
-          if (allReservation[j].booked.includes(req.body.booked[i])) {
-            notAvailable.push(req.body.booked[i]);
+      req.body.booked.forEach((seat) => {
+        for (let i = 0; i < allReservation.length; i++) {
+          const reservationSeats = allReservation[i].booked.split(",");
+          for (let j = 0; j < reservationSeats.length; j++) {
+            if (reservationSeats[j] === seat) {
+              notAvailable.push(seat);
+            }
           }
         }
-      }
+      });
 
       if (notAvailable.length > 0) {
         return res.status(422).json({ errors: notAvailable });
       }
 
-      // Controllo se l'aereo è ancora disponibile o meno 
-      const flightSize = await dao.getFlight(req.body.id_Ar)
-
-      if(allReservation.length + req.body.booked.length === flightSize.rows*flightSize.seats){
-        const updateRow = await dao.updateStatusFlight(req.body.id_Ar,0)
-      }else if (allReservation.length + req.body.booked.length >= flightSize.rows*flightSize.seats){
+      // Controllo se l'aereo è ancora disponibile o meno
+      const flightSize = await dao.getFlight(req.body.id_Ar);
+      let reservationSize =  0;
+      allReservation.forEach((e)=>{
+        const reservationSeats = e.booked.split(",");
+        reservationSize+= reservationSeats.length;
+      }) 
+      
+      if (
+        reservationSize + req.body.booked.length ===
+        flightSize.rows * flightSize.seats
+      ) {
+        const updateRow = await dao.updateStatusFlight(req.body.id_Ar, 0);
+      } else if (
+        allReservation.length + req.body.booked.length >=
+        flightSize.rows * flightSize.seats
+      ) {
         return res
-        .status(422)
-        .json({ error: "il numero di prenotazioni eccede quello dei posti totali dell' aereo " });
+          .status(422)
+          .json({
+            error:
+              "il numero di prenotazioni eccede quello dei posti totali dell' aereo ",
+          });
       }
       const seats = req.body.booked.join(",");
 
@@ -203,7 +222,7 @@ app.post(
       //console.log("answer to add: "+JSON.stringify(answer));
 
       const reservationId = await dao.createReservation(reservation);
-     
+
       setTimeout(() => res.status(201).json(reservationId), answerDelay);
     } catch (err) {
       console.log(err);
@@ -217,11 +236,10 @@ app.post(
 // DELETE /api/reservations/<id>
 app.delete("/api/reservations/:id", isLoggedIn, async (req, res) => {
   try {
-
     const reservation = await dao.getReservationById(req.params.id);
-    console.log(reservation)
-    if ( reservation.status === 0 ){
-      await dao.updateStatusFlight(reservation.id_Ar,1)
+    console.log(reservation);
+    if (reservation.status === 0) {
+      await dao.updateStatusFlight(reservation.id_Ar, 1);
     }
     const numRowChanges = await dao.deleteReservation(
       req.params.id,
