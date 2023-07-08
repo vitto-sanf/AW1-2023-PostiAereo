@@ -20,7 +20,7 @@ function App() {
 
 
   function handleError(err) {
-    console.log("err: " + JSON.stringify(err)); // Only for debug
+    //console.log("err: " + JSON.stringify(err)); // Only for debug
     let errMsg = "Unkwnown error";
     if (err.errors) {
       if(err.errors[0].msg){
@@ -97,7 +97,7 @@ function App() {
       .catch(
         (err) => {
           setDirty(true);
-          setTimeout(()=>handleError(err),300)
+          setTimeout(()=>handleError(err),200)
           
         } 
       );
@@ -144,6 +144,7 @@ function App() {
                 errorMsg={errorMsg}
                 seatErrors={reservationError}
                 resetErrorMsg={() => setErrorMsg("")}
+                setErrorMsg={(err)=>setErrorMsg(err)}
                 resetSeatError={() => setReservationError([])}
                 confirmMsg= {confirmMsg}
                 resetConfirmMsg={() => setConfirmMsg("")}

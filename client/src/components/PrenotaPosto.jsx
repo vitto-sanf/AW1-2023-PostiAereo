@@ -32,8 +32,8 @@ function SeatReservationPage(props) {
         setSeatsPerRow(postiTotali.seats);
         setBookedSeats(postiOccupati);
         setLoading(false);
-      } catch (error) {
-        console.log(error);
+      } catch  {
+        props.setErrorMsg("Errore nel caricamento dati")
       }
     };
     datiAreo();
@@ -78,7 +78,7 @@ function SeatReservationPage(props) {
 
       if (
         !bookedSeats.includes(seatNumber) && !selectedSeats.includes(seatNumber)
-      ) {
+      ) { 
         selectedSeats.push(seatNumber);
         count++;
       }

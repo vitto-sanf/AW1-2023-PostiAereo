@@ -57,7 +57,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions)); // NB: Usare solo per sviluppo e per l'esame! Altrimenti indicare dominio e porta corretti
-const answerDelay = 500;
+const answerDelay = 200;
 
 // custom middleware: check if a given request is coming from an authenticated user
 const isLoggedIn = (req, res, next) => {
