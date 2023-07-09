@@ -219,7 +219,7 @@ app.post(
         id_User: req.user.id,
       };
 
-      //console.log("answer to add: "+JSON.stringify(answer));
+      
 
       const reservationId = await dao.createReservation(reservation);
 

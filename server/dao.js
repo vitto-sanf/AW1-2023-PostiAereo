@@ -1,5 +1,5 @@
 'use strict';
-/* Data Access Object (DAO) module for accessing questions and answers */
+/* Data Access Object (DAO) module  */
 
 const sqlite = require('sqlite3');
 
