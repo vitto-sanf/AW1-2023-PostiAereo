@@ -70,19 +70,21 @@ function SeatReservationPage(props) {
 
   const automaticReservation = (nPassengers) => {
     let count = 0;
-
+    const random = [];
+    
     while (count < nPassengers) {
       let row = Math.floor(Math.random() * rows) + 1;
       let seat = Math.floor(Math.random() * seatsPerRow);
       const seatNumber = `${row}${letters.charAt(seat)}`;
 
       if (
-        !bookedSeats.includes(seatNumber) && !selectedSeats.includes(seatNumber)
+        !bookedSeats.includes(seatNumber) && !random.includes(seatNumber)
       ) { 
-        selectedSeats.push(seatNumber);
+        random.push(seatNumber);
         count++;
       }
     }
+    setSelectedSeats(random);
   };
 
   const handleSeatClick = (seat) => {
